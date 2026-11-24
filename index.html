@@ -2369,28 +2369,6 @@ onerror="handleGalleryImgError(this)"
 .join("")
 : "";
 
-const privateStatusPill = engagementUnlocked
-? `
-<span
-class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-medium"
-style="border-color: var(--border-strong); background: var(--bg-pill); color: var(--accent-gold);"
->
-<span>Unlocked ✓</span>
-</span>
-`
-: `
-<span
-class="inline-flex items-center gap-1 text-[11px] font-normal"
-style="color: var(--text-muted);"
->
-<svg class="h-3 w-3 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-<rect x="4" y="11" width="16" height="10" rx="2" />
-<path stroke-linecap="round" d="M8 11V7a4 4 0 118 0v4" />
-</svg>
-<span>Private Album · Passcode Required</span>
-</span>
-`;
-
 mount.innerHTML = `
 <section id="section-engagement-gallery" aria-labelledby="heading-engagement-gallery" class="pt-4 sm:pt-6">
 <!-- Main Engagement Gallery Header -->
@@ -2427,41 +2405,7 @@ ${publicCardsHtml}
 </div>
 </div>
 
-<!-- Sub-Section 2: Family Photos (Hidden until unlocked with 19052024) -->
-<div class="${engagementUnlocked ? "" : "border-t pt-5 opacity-75 transition-opacity duration-300 hover:opacity-100"}" style="${engagementUnlocked ? "" : "border-color: var(--border-hairline);"}">
-<div class="${engagementUnlocked ? "mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between" : "flex flex-wrap items-center justify-between gap-2.5"}">
-<div class="flex flex-wrap items-center gap-2">
-<h3
-class="${engagementUnlocked ? "font-serif text-2xl sm:text-[28px] font-medium" : "font-serif text-lg sm:text-xl font-medium"}"
-style="color: ${engagementUnlocked ? "var(--text-primary)" : "var(--text-muted)"};"
->
-Family Photos
-</h3>
-${privateStatusPill}
-</div>
 
-${!engagementUnlocked ? `
-<button
-id="unlockEngagementBtn"
-type="button"
-class="inline-flex min-h-[36px] items-center justify-center gap-1.5 rounded-full border px-3.5 text-xs font-medium transition-all duration-200 hover:opacity-100 active:scale-95"
-style="border-color: var(--border-hairline); background: transparent; color: var(--text-muted);"
->
-<svg class="h-3 w-3 opacity-75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-<rect x="4" y="11" width="16" height="10" rx="2" />
-<path stroke-linecap="round" d="M8 11V7a4 4 0 118 0v4" />
-</svg>
-<span>Unlock Family Photos</span>
-</button>
-` : ""}
-</div>
-
-${engagementUnlocked ? `
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-${privateCardsHtml}
-</div>
-` : ""}
-</div>
 </section>
 
 <!-- One final featured photograph, displayed after the Engagement Photo Gallery -->
@@ -2534,6 +2478,31 @@ mount.innerHTML = `
     ${escapeHtml(card.caption || "")}
   </p>
 </section>
+<!-- Elegant invitation call-to-action at the bottom of the gallery -->
+<div class="mx-auto max-w-3xl px-4 pb-14 sm:pb-20">
+  <button
+    type="button"
+    data-filter-id="invitation-card"
+    class="group relative flex w-full items-center justify-between gap-4 overflow-hidden rounded-[24px] px-5 py-5 text-left shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-[0.99] sm:rounded-[28px] sm:px-8 sm:py-7"
+    style="background:linear-gradient(120deg,#9b6b62 0%,#c18d82 48%,#d5ad83 100%); color:#fff;"
+    aria-label="View the wedding invitation"
+  >
+    <span class="pointer-events-none absolute -right-8 -top-10 h-36 w-36 rounded-full border border-white/20"></span>
+    <span class="pointer-events-none absolute -right-2 -bottom-16 h-40 w-40 rounded-full border border-white/15"></span>
+    <span class="relative flex min-w-0 items-center gap-4">
+      <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/25 bg-white/15 text-2xl shadow-inner sm:h-14 sm:w-14">💌</span>
+      <span class="min-w-0">
+        <span class="block text-[10px] font-semibold uppercase tracking-[0.22em] text-white/75">A little something special</span>
+        <span class="mt-1 block font-serif text-xl font-medium sm:text-2xl">View Wedding Invitation</span>
+        <span class="mt-1 block text-xs text-white/80 sm:text-sm">The invitation, page by page</span>
+      </span>
+    </span>
+    <span class="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/15 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></svg>
+    </span>
+  </button>
+</div>
+
 `;
 }
 
