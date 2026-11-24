@@ -1439,19 +1439,24 @@ caption: "Both families coming together to celebrate Monika & Avadh."
 },
 
 /* -----------------------------------------------------------------------
-✨ INVITATION CARD (Hidden in "All" — Shown when button is clicked) ✨
-- Paste your Invitation Card URL (PDF, Google Drive, Canva, image, etc.) in `url`.
-- Leave `url: ""` empty if you want to hide the "Invitation Card" button completely.
-- Set `openDirectly: true` to open the URL immediately when the button is tapped.
+✨ INVITATION CARD — Photos from GitHub issue #4, in their original order.
 ----------------------------------------------------------------------- */
 INVITATION_CARD: {
 label: "Invitation Card",
-url: "https://example.com/monika-avadh-invitation",
-openDirectly: false,
-title: "Wedding Invitation Card",
-subtitle: "Monika & Avadh · 31 NOV 2024",
-caption: "With the blessings of our families, we warmly invite you to celebrate the union of Monika & Avadh.",
-previewImage: "https://images.unsplash.com/photo-1607190074257-dd4b7af0309f?auto=format&fit=crop&w=1200&q=85"
+title: "Wedding Invitation",
+subtitle: "Monika & Avadh",
+caption: "With the blessings of our families, we warmly invite you to celebrate with us.",
+photos: [
+"https://github.com/user-attachments/assets/448dab1e-9a29-4c1a-87d3-c93da9aae91b",
+"https://github.com/user-attachments/assets/8354ad5f-97a2-40bc-98fb-1a78b17ca3ad",
+"https://github.com/user-attachments/assets/42980f03-51f2-49c0-865b-42fe2bfc020a",
+"https://github.com/user-attachments/assets/459361c7-62ac-4fd0-8c55-46621f2c397c",
+"https://github.com/user-attachments/assets/df045269-1c64-4b05-b186-88e535ba705d",
+"https://github.com/user-attachments/assets/b36bd6f3-daf7-4f5c-b2e6-9f7d144724ce",
+"https://github.com/user-attachments/assets/f8783282-a090-4f95-a190-260bf1bb3555",
+"https://github.com/user-attachments/assets/7b66cd46-b29a-4ae9-8a39-d40f4d526145",
+"https://github.com/user-attachments/assets/052ea937-0416-4e39-8af3-d19818973459"
+]
 }
 };
 
@@ -1999,8 +2004,8 @@ count: normalizedVideos.filter(v => v.section === sec.id).length
 { id: "engagement-gallery", label: "Engagement Gallery", count: totalGalleryPhotos },
 ];
 
-// Show "Invitation Card" button only when a URL is configured
-if (CONFIG.INVITATION_CARD && String(CONFIG.INVITATION_CARD.url || "").trim()) {
+// Show "Invitation Card" button when invitation photos are configured
+if (CONFIG.INVITATION_CARD && Array.isArray(CONFIG.INVITATION_CARD.photos) && CONFIG.INVITATION_CARD.photos.length) {
 pills.push({
 id: "invitation-card",
 label: CONFIG.INVITATION_CARD.label || "Invitation Card",
@@ -2483,8 +2488,8 @@ const mount = document.getElementById("invitationCardMount");
 if (!mount) return;
 
 const card = CONFIG.INVITATION_CARD;
-const cardUrl = String(card?.url || "").trim();
-const shouldShow = activeFilter === "invitation-card" && Boolean(cardUrl);
+const invitationPhotos = Array.isArray(card?.photos) ? card.photos.filter(Boolean) : [];
+const shouldShow = activeFilter === "invitation-card" && invitationPhotos.length > 0;
 
 mount.classList.toggle("hidden", !shouldShow);
 if (!shouldShow) {
@@ -2494,65 +2499,39 @@ return;
 
 mount.innerHTML = `
 <section id="section-invitation-card" aria-labelledby="heading-invitation-card" class="animate-card-in">
-<div class="mb-7 sm:mb-9 flex flex-col gap-2.5 sm:flex-row sm:items-end sm:justify-between border-b pb-4" style="border-color: var(--border-hairline);">
-<div>
-<p class="text-[11px] font-semibold uppercase tracking-[0.24em]" style="color: var(--accent-gold);">
-Official Invitation · ${escapeHtml(CONFIG.COUPLE.weddingDate)}
-</p>
-<h2
-id="heading-invitation-card"
-class="mt-1 font-serif text-3xl sm:text-4xl font-medium tracking-tight"
-style="color: var(--text-primary);"
->
-${escapeHtml(card.title || "Wedding Invitation Card")}
-</h2>
-</div>
-<p class="max-w-md text-xs sm:text-sm" style="color: var(--text-secondary);">
-${escapeHtml(card.subtitle || CONFIG.COUPLE.names)}
-</p>
-</div>
+  <div class="mb-7 sm:mb-9 flex flex-col gap-2.5 sm:flex-row sm:items-end sm:justify-between border-b pb-4" style="border-color: var(--border-hairline);">
+    <div>
+      <p class="text-[11px] font-semibold uppercase tracking-[0.24em]" style="color: var(--accent-gold);">
+        Official Invitation · ${escapeHtml(CONFIG.COUPLE.weddingDate)}
+      </p>
+      <h2 id="heading-invitation-card" class="mt-1 font-serif text-3xl sm:text-4xl font-medium tracking-tight" style="color: var(--text-primary);">
+        ${escapeHtml(card.title || "Wedding Invitation")}
+      </h2>
+    </div>
+    <p class="max-w-md text-xs sm:text-sm" style="color: var(--text-secondary);">
+      ${escapeHtml(card.subtitle || CONFIG.COUPLE.names)}
+    </p>
+  </div>
 
-<div class="glass-card overflow-hidden rounded-[26px] sm:rounded-[30px]" style="border-color: var(--border-strong);">
-${card.previewImage ? `
-<div class="relative aspect-[16/9] w-full overflow-hidden bg-black/15">
-<img
-src="${escapeHtml(card.previewImage)}"
-alt="${escapeHtml(card.title || "Wedding Invitation Card")}"
-data-title="${escapeHtml(card.title || "Wedding Invitation Card")}"
-class="h-full w-full object-cover"
-onerror="handleGalleryImgError(this)"
-/>
-<div class="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent"></div>
-<div class="absolute inset-x-0 bottom-0 p-5 sm:p-8 text-white">
-<p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#E3BC8B]">
-${escapeHtml(card.subtitle || "")}
-</p>
-<h3 class="mt-1 font-serif italic text-2xl sm:text-4xl font-medium">
-${escapeHtml(CONFIG.COUPLE.names)}
-</h3>
-</div>
-</div>
-` : ""}
+  <div class="mx-auto flex max-w-3xl flex-col gap-4 sm:gap-6">
+    ${invitationPhotos.map((src, index) => `
+      <figure class="overflow-hidden rounded-2xl sm:rounded-[26px] bg-white shadow-sm ring-1 ring-black/5">
+        <img
+          src="${escapeHtml(src)}"
+          alt="Wedding invitation page ${index + 1}"
+          loading="lazy"
+          decoding="async"
+          class="block h-auto w-full object-contain"
+          style="background:#fff;"
+          onerror="handleGalleryImgError(this)"
+        />
+      </figure>
+    `).join("")}
+  </div>
 
-<div class="flex flex-col items-center justify-between gap-5 p-6 sm:flex-row sm:p-8">
-<p class="max-w-lg text-center sm:text-left text-sm sm:text-[15px] leading-relaxed" style="color: var(--text-secondary);">
-${escapeHtml(card.caption || "Tap below to view the official wedding invitation card.")}
-</p>
-
-<a
-href="${escapeHtml(cardUrl)}"
-target="_blank"
-rel="noopener noreferrer"
-class="inline-flex min-h-[48px] shrink-0 items-center justify-center gap-2 rounded-full px-6 text-sm font-medium shadow-md transition-all duration-200 hover:scale-[1.03] active:scale-95"
-style="background: linear-gradient(135deg, var(--accent-rose), var(--accent-gold)); color: #FFFFFF;"
->
-<span>Open Invitation Card</span>
-<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-<path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-</svg>
-</a>
-</div>
-</div>
+  <p class="mx-auto mt-6 max-w-2xl text-center text-sm leading-relaxed" style="color: var(--text-secondary);">
+    ${escapeHtml(card.caption || "")}
+  </p>
 </section>
 `;
 }
@@ -2927,15 +2906,7 @@ return;
 const pill = e.target.closest("[data-filter-id]");
 if (pill) {
 const selectedFilter = pill.getAttribute("data-filter-id");
-if (
-selectedFilter === "invitation-card" &&
-CONFIG.INVITATION_CARD &&
-CONFIG.INVITATION_CARD.openDirectly &&
-String(CONFIG.INVITATION_CARD.url || "").trim()
-) {
-window.open(CONFIG.INVITATION_CARD.url, "_blank", "noopener,noreferrer");
-return;
-}
+
 activeFilter = selectedFilter;
 renderFilterPills();
 renderSections();
