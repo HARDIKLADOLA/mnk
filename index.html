@@ -324,6 +324,82 @@ scroll-behavior: auto !important;
   }
 }
 
+
+/* Pre-wedding auto slideshow above Teasers & Promos */
+.prewedding-slider { width: 100%; }
+.prewedding-slider-frame {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  aspect-ratio: 16 / 8.2;
+  min-height: 210px;
+  max-height: 560px;
+  border-radius: 26px;
+  border: 1px solid var(--border-hairline);
+  background: var(--bg-card);
+  box-shadow: 0 16px 44px rgba(25, 17, 24, .09);
+}
+.prewedding-slider-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 850ms cubic-bezier(.22, 1, .36, 1);
+  will-change: transform;
+}
+.prewedding-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: var(--bg-card);
+  cursor: pointer;
+}
+.prewedding-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+.prewedding-slider-arrow {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  transform: translateY(-50%);
+  border: 1px solid rgba(255,255,255,.45);
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(24, 20, 25, .34);
+  backdrop-filter: blur(12px);
+  font-size: 30px;
+  line-height: 1;
+  transition: background .2s ease, transform .2s ease;
+}
+.prewedding-slider-arrow:hover { background: rgba(24,20,25,.58); transform: translateY(-50%) scale(1.06); }
+.prewedding-slider-prev { left: 14px; }
+.prewedding-slider-next { right: 14px; }
+.prewedding-slider-dots { display: flex; justify-content: center; gap: 7px; padding-top: 13px; }
+.prewedding-slider-dot {
+  width: 6px; height: 6px; padding: 0; border: 0; border-radius: 999px;
+  background: var(--text-muted); opacity: .35; transition: width .35s ease, opacity .35s ease, background .35s ease;
+}
+.prewedding-slider-dot.is-active { width: 22px; opacity: .9; background: var(--accent-rose); }
+@media (max-width: 640px) {
+  .prewedding-slider-frame { aspect-ratio: 4 / 3; min-height: 190px; border-radius: 20px; }
+  .prewedding-slider-arrow { width: 36px; height: 36px; font-size: 26px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .prewedding-slider-track, .prewedding-slider-dot { transition: none !important; }
+}
+
 </style>
 </head>
 
@@ -2116,8 +2192,28 @@ ${escapeHtml(video.caption)}
 })
 .join("");
 
+const preWeddingSliderHtml = sec.id === "teasers"
+? `
+<div id="preWeddingAutoSlider" class="prewedding-slider mb-8 sm:mb-10">
+  <div class="prewedding-slider-frame">
+    <div id="preWeddingSliderTrack" class="prewedding-slider-track">
+      ${(CONFIG.ENGAGEMENT_GALLERY.preWeddingPhotos || []).map((photo, photoIndex) => `
+        <button type="button" class="prewedding-slide" data-photo-album="prewedding" data-photo-index="${photoIndex}" aria-label="Open pre-wedding photograph ${photoIndex + 1}">
+          <img src="${escapeHtml(photo.src)}" alt="Monika and Avadh pre-wedding photograph ${photoIndex + 1}" loading="${photoIndex < 2 ? "eager" : "lazy"}" onerror="handleGalleryImgError(this)" />
+        </button>
+      `).join("")}
+    </div>
+    <button type="button" id="preWeddingSliderPrev" class="prewedding-slider-arrow prewedding-slider-prev" aria-label="Previous pre-wedding photo">‹</button>
+    <button type="button" id="preWeddingSliderNext" class="prewedding-slider-arrow prewedding-slider-next" aria-label="Next pre-wedding photo">›</button>
+  </div>
+  <div id="preWeddingSliderDots" class="prewedding-slider-dots" aria-label="Pre-wedding slideshow position"></div>
+</div>
+`
+: "";
+
 return `
 <section id="section-${escapeHtml(sec.id)}" aria-labelledby="heading-${escapeHtml(sec.id)}">
+${preWeddingSliderHtml}
 <div class="mb-6 sm:mb-8 flex flex-col gap-2.5 sm:flex-row sm:items-end sm:justify-between border-b pb-4" style="border-color: var(--border-hairline);">
 <div>
 <p class="text-[11px] font-semibold uppercase tracking-[0.24em]" style="color: var(--accent-gold);">
@@ -2146,12 +2242,60 @@ ${cardsHtml}
 `;
 })
 .join("");
+initPreWeddingAutoSlider();
+}
+
+
+function initPreWeddingAutoSlider() {
+  const root = document.getElementById("preWeddingAutoSlider");
+  if (!root) {
+    clearInterval(preWeddingSliderTimer);
+    preWeddingSliderTimer = null;
+    return;
+  }
+  const track = document.getElementById("preWeddingSliderTrack");
+  const slides = Array.from(track?.querySelectorAll(".prewedding-slide") || []);
+  const dots = document.getElementById("preWeddingSliderDots");
+  if (!track || slides.length < 1 || !dots) return;
+
+  clearInterval(preWeddingSliderTimer);
+  let active = 0;
+  dots.innerHTML = slides.map((_, i) =>
+    `<button type="button" class="prewedding-slider-dot${i === 0 ? " is-active" : ""}" data-slide-to="${i}" aria-label="Show photo ${i + 1}"></button>`
+  ).join("");
+
+  const dotButtons = Array.from(dots.querySelectorAll("[data-slide-to]"));
+  const show = (index) => {
+    active = (index + slides.length) % slides.length;
+    track.style.transform = `translate3d(-${active * 100}%, 0, 0)`;
+    dotButtons.forEach((dot, i) => {
+      dot.classList.toggle("is-active", i === active);
+      dot.setAttribute("aria-current", i === active ? "true" : "false");
+    });
+  };
+  const start = () => {
+    clearInterval(preWeddingSliderTimer);
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      preWeddingSliderTimer = setInterval(() => show(active + 1), 4200);
+    }
+  };
+
+  document.getElementById("preWeddingSliderPrev")?.addEventListener("click", () => { show(active - 1); start(); });
+  document.getElementById("preWeddingSliderNext")?.addEventListener("click", () => { show(active + 1); start(); });
+  dotButtons.forEach(dot => dot.addEventListener("click", () => { show(Number(dot.dataset.slideTo)); start(); }));
+  root.addEventListener("mouseenter", () => clearInterval(preWeddingSliderTimer));
+  root.addEventListener("mouseleave", start);
+  root.addEventListener("focusin", () => clearInterval(preWeddingSliderTimer));
+  root.addEventListener("focusout", start);
+  show(0);
+  start();
 }
 
 /* =========================================================================
 RENDER ENGAGEMENT PHOTO GALLERY (Open + Private Passcode Albums)
 ========================================================================= */
 
+let preWeddingSliderTimer = null;
 let photoOrderShuffled = false;
 function shufflePhotoCollectionsOnce() {
   if (photoOrderShuffled) return;
