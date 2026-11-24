@@ -2152,7 +2152,23 @@ ${cardsHtml}
 RENDER ENGAGEMENT PHOTO GALLERY (Open + Private Passcode Albums)
 ========================================================================= */
 
+let photoOrderShuffled = false;
+function shufflePhotoCollectionsOnce() {
+  if (photoOrderShuffled) return;
+  const shuffle = (items) => {
+    for (let i = items.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [items[i], items[j]] = [items[j], items[i]];
+    }
+  };
+  shuffle(CONFIG.ENGAGEMENT_GALLERY.publicPhotos);
+  shuffle(CONFIG.ENGAGEMENT_GALLERY.privatePhotos);
+  shuffle(CONFIG.ENGAGEMENT_GALLERY.preWeddingPhotos || []);
+  photoOrderShuffled = true;
+}
+
 function renderEngagementGallery() {
+shufflePhotoCollectionsOnce();
 const mount = document.getElementById("engagementGalleryMount");
 if (!mount) return;
 
@@ -2182,18 +2198,9 @@ loading="lazy"
 class="thumb-img memory-photo-img h-full w-full object-contain"
 onerror="handleGalleryImgError(this)"
 />
-<span class="absolute top-3 left-3 rounded-full border border-white/20 bg-black/45 px-2.5 py-0.5 text-[11px] font-semibold tracking-wider text-white/95 backdrop-blur-md tabular-nums">
-${String(idx + 1).padStart(2, "0")}
-</span>
+
 </div>
-<div class="flex flex-1 flex-col p-4 sm:p-5">
-<h4 class="font-serif text-[21px] sm:text-[23px] font-medium leading-snug" style="color: var(--text-primary);">
-${escapeHtml(photo.title)}
-</h4>
-<p class="mt-1.5 text-[13px] leading-relaxed" style="color: var(--text-secondary);">
-${escapeHtml(photo.caption)}
-</p>
-</div>
+
 </article>
 `)
 .join("");
@@ -2219,19 +2226,10 @@ loading="lazy"
 class="thumb-img memory-photo-img h-full w-full object-contain transition-all duration-500"
 onerror="handleGalleryImgError(this)"
 />
-<span class="absolute top-3 left-3 rounded-full border border-white/20 bg-black/45 px-2.5 py-0.5 text-[11px] font-semibold tracking-wider text-white/95 backdrop-blur-md tabular-nums">
-${String(idx + 1).padStart(2, "0")}
-</span>
+
 </div>
 
-<div class="flex flex-1 flex-col p-4 sm:p-5">
-<h4 class="font-serif text-[21px] sm:text-[23px] font-medium leading-snug" style="color: var(--text-primary);">
-${escapeHtml(photo.title)}
-</h4>
-<p class="mt-1.5 text-[13px] leading-relaxed" style="color: var(--text-secondary);">
-${escapeHtml(photo.caption)}
-</p>
-</div>
+
 </article>
 `)
 .join("")
@@ -2275,9 +2273,7 @@ style="color: var(--text-primary);"
 Engagement Memories
 </h2>
 </div>
-<p class="max-w-md text-xs sm:text-sm" style="color: var(--text-secondary);">
-Highlights from the day Monika &amp; Avadh said yes, paired with a private keepsake album for close family.
-</p>
+
 </div>
 
 <!-- Sub-Section 1: Open Gallery (Without Password) -->
@@ -2287,16 +2283,9 @@ Highlights from the day Monika &amp; Avadh said yes, paired with a private keeps
 <h3 class="font-serif text-2xl sm:text-[28px] font-medium" style="color: var(--text-primary);">
 Open Gallery
 </h3>
-<p class="text-xs sm:text-sm" style="color: var(--text-muted);">
-Open to all guests — tap any photograph to view fullscreen.
-</p>
+
 </div>
-<span
-class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-medium"
-style="border-color: var(--border-hairline); background: var(--bg-pill); color: var(--accent-gold);"
->
-${publicPhotos.length} Photos · Open Access
-</span>
+
 </div>
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
@@ -2349,6 +2338,7 @@ RENDER PRE-WEDDING PHOTO GALLERY
 ========================================================================= */
 
 function renderPreWeddingGallery() {
+shufflePhotoCollectionsOnce();
 const mount = document.getElementById("preWeddingGalleryMount");
 if (!mount) return;
 
@@ -2369,12 +2359,9 @@ aria-label="View pre-wedding photo: ${escapeHtml(photo.title)}"
 >
 <div class="memory-photo-frame relative aspect-[3/2] w-full overflow-hidden">
 <img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.title)}" data-title="${escapeHtml(photo.title)}" loading="lazy" class="thumb-img memory-photo-img h-full w-full object-contain" onerror="handleGalleryImgError(this)" />
-<span class="absolute top-3 left-3 rounded-full border border-white/20 bg-black/45 px-2.5 py-0.5 text-[11px] font-semibold tracking-wider text-white/95 backdrop-blur-md tabular-nums">${String(idx + 1).padStart(2, "0")}</span>
+
 </div>
-<div class="flex flex-1 flex-col p-4 sm:p-5">
-<h4 class="font-serif text-[21px] sm:text-[23px] font-medium leading-snug" style="color: var(--text-primary);">${escapeHtml(photo.title)}</h4>
-<p class="mt-1.5 text-[13px] leading-relaxed" style="color: var(--text-secondary);">${escapeHtml(photo.caption)}</p>
-</div>
+
 </article>
 `).join("");
 
@@ -2385,12 +2372,9 @@ mount.innerHTML = `
 <p class="text-[11px] font-semibold uppercase tracking-[0.24em]" style="color: var(--accent-gold);">Before Forever · Monika &amp; Avadh</p>
 <h2 id="heading-pre-wedding-gallery" class="mt-1 font-serif text-3xl sm:text-4xl font-medium tracking-tight" style="color: var(--text-primary);">Pre-Wedding Memories</h2>
 </div>
-<p class="max-w-md text-xs sm:text-sm" style="color: var(--text-secondary);">A little collection of the moments, smiles, and portraits before the wedding day.</p>
+
 </div>
-<div class="mb-5 flex items-center justify-between gap-2">
-<p class="text-xs sm:text-sm" style="color: var(--text-muted);">Tap any photograph to view it fullscreen.</p>
-<span class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-medium" style="border-color: var(--border-hairline); background: var(--bg-pill); color: var(--accent-gold);">${photos.length} Photos</span>
-</div>
+
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">${cardsHtml}</div>
 </section>
 `;
