@@ -525,6 +525,16 @@ class="mx-auto max-w-6xl px-4 pb-12 sm:px-6 sm:pb-16 lg:px-8"
 </div>
 
 <!-- =====================================================================
+PRE-WEDDING PHOTO GALLERY
+===================================================================== -->
+<div
+id="preWeddingGalleryMount"
+class="mx-auto max-w-6xl px-4 pb-12 sm:px-6 sm:pb-16 lg:px-8"
+>
+<!-- Dynamically populated from CONFIG.ENGAGEMENT_GALLERY.preWeddingPhotos -->
+</div>
+
+<!-- =====================================================================
 INVITATION CARD (HIDDEN UNTIL "INVITATION CARD" BUTTON IS CLICKED)
 ===================================================================== -->
 <div
@@ -1148,6 +1158,78 @@ Replace any `src` URL below with your own engagement photo URLs anytime!
 - `privatePhotos` -> Family Photos (unlocked with 19052024)
 ----------------------------------------------------------------------- */
 ENGAGEMENT_GALLERY: {
+preWeddingPhotos: [
+{
+src: "https://github.com/user-attachments/assets/e94a6428-5c37-4624-ba60-126acef26bc5",
+title: "Pre-Wedding Portrait 01",
+caption: "A beautiful moment from Monika & Avadh’s pre-wedding story."
+},
+{
+src: "https://github.com/user-attachments/assets/c971fdee-54fc-4b38-9495-384c47217f84",
+title: "Pre-Wedding Portrait 02",
+caption: "A beautiful moment from Monika & Avadh’s pre-wedding story."
+},
+{
+src: "https://github.com/user-attachments/assets/5448b670-334d-422a-bf84-f14931c72bf9",
+title: "Pre-Wedding Portrait 03",
+caption: "A beautiful moment from Monika & Avadh’s pre-wedding story."
+},
+{
+src: "https://github.com/user-attachments/assets/d70be88c-7920-4634-b350-4da8acf0b10a",
+title: "Pre-Wedding Portrait 04",
+caption: "A beautiful moment from Monika & Avadh’s pre-wedding story."
+},
+{
+src: "https://github.com/user-attachments/assets/de7a54f1-9d22-48ed-accd-1351418ffdde",
+title: "Pre-Wedding Portrait 05",
+caption: "A beautiful moment from Monika & Avadh’s pre-wedding story."
+},
+{
+src: "https://github.com/user-attachments/assets/1d8c9423-38a0-4d41-beca-aeaadf43f1f3",
+title: "Pre-Wedding Portrait 06",
+caption: "A beautiful moment from Monika & Avadh’s pre-wedding story."
+},
+{
+src: "https://github.com/user-attachments/assets/d6af1a38-50f4-4592-b45a-40d508948db0",
+title: "Pre-Wedding Portrait 07",
+caption: "A beautiful moment from Monika & Avadh’s pre-wedding story."
+},
+{
+src: "https://github.com/user-attachments/assets/b03c3390-1799-469e-a5c5-4815c45b05cb",
+title: "Pre-Wedding Portrait 08",
+caption: "A beautiful moment from Monika & Avadh’s pre-wedding story."
+},
+{
+src: "https://github.com/user-attachments/assets/dca8fb2b-1c73-43df-8d13-fdf4d9be6e2e",
+title: "Pre-Wedding Portrait 09",
+caption: "A beautiful moment from Monika & Avadh’s pre-wedding story."
+},
+{
+src: "https://github.com/user-attachments/assets/ec74433c-d697-43fd-b87d-24ecfdf00498",
+title: "Pre-Wedding Portrait 10",
+caption: "A beautiful moment from Monika & Avadh’s pre-wedding story."
+},
+{
+src: "https://github.com/user-attachments/assets/e527f3ac-a13b-4a69-827a-7c824f464eb7",
+title: "Pre-Wedding Portrait 11",
+caption: "A beautiful moment from Monika & Avadh’s pre-wedding story."
+},
+{
+src: "https://github.com/user-attachments/assets/3db3234a-8bcd-4483-8df5-e25a2ecb6dd4",
+title: "Pre-Wedding Portrait 12",
+caption: "A beautiful moment from Monika & Avadh’s pre-wedding story."
+},
+{
+src: "https://github.com/user-attachments/assets/8c04e21c-4357-4a6d-92db-dcf6560a48b9",
+title: "Pre-Wedding Portrait 13",
+caption: "A beautiful moment from Monika & Avadh’s pre-wedding story."
+},
+{
+src: "https://github.com/user-attachments/assets/fa0b37e4-cd3e-4e1d-af93-ba570ba4df50",
+title: "Pre-Wedding Portrait 14",
+caption: "A beautiful moment from Monika & Avadh’s pre-wedding story."
+}
+],
 publicPhotos: [
 {
 src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=1200&q=85",
@@ -1772,7 +1854,8 @@ id: sec.id,
 label: sec.filterLabel || sec.label,
 count: normalizedVideos.filter(v => v.section === sec.id).length
 })).filter(p => p.count > 0),
-{ id: "engagement-gallery", label: "Engagement Gallery", count: totalGalleryPhotos }
+{ id: "engagement-gallery", label: "Engagement Gallery", count: totalGalleryPhotos },
+{ id: "pre-wedding-gallery", label: "Pre-Wedding", count: CONFIG.ENGAGEMENT_GALLERY.preWeddingPhotos.length }
 ];
 
 // Show "Invitation Card" button only when a URL is configured
@@ -1820,7 +1903,7 @@ function renderSections() {
 const container = document.getElementById("sectionsContainer");
 if (!container) return;
 
-if (activeFilter === "engagement-gallery" || activeFilter === "invitation-card") {
+if (activeFilter === "engagement-gallery" || activeFilter === "pre-wedding-gallery" || activeFilter === "invitation-card") {
 container.innerHTML = "";
 container.classList.add("hidden");
 return;
@@ -2181,6 +2264,60 @@ ${privateCardsHtml}
 `;
 }
 
+
+/* =========================================================================
+RENDER PRE-WEDDING PHOTO GALLERY
+========================================================================= */
+
+function renderPreWeddingGallery() {
+const mount = document.getElementById("preWeddingGalleryMount");
+if (!mount) return;
+
+const shouldShow = activeFilter === "all" || activeFilter === "pre-wedding-gallery";
+mount.classList.toggle("hidden", !shouldShow);
+if (!shouldShow) return;
+
+const photos = CONFIG.ENGAGEMENT_GALLERY.preWeddingPhotos || [];
+const cardsHtml = photos.map((photo, idx) => `
+<article
+class="film-card glass-card animate-card-in group flex cursor-pointer flex-col overflow-hidden rounded-[20px] sm:rounded-[24px]"
+style="animation-delay: ${Math.min(idx * 45, 260)}ms;"
+data-photo-album="prewedding"
+data-photo-index="${idx}"
+role="button"
+tabindex="0"
+aria-label="View pre-wedding photo: ${escapeHtml(photo.title)}"
+>
+<div class="relative aspect-[4/3] w-full overflow-hidden bg-black/10">
+<img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.title)}" data-title="${escapeHtml(photo.title)}" loading="lazy" class="thumb-img h-full w-full object-cover" onerror="handleGalleryImgError(this)" />
+<div class="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-80 transition-opacity group-hover:opacity-95"></div>
+<span class="absolute top-3 left-3 rounded-full border border-white/20 bg-black/45 px-2.5 py-0.5 text-[11px] font-semibold tracking-wider text-white/95 backdrop-blur-md tabular-nums">${String(idx + 1).padStart(2, "0")}</span>
+</div>
+<div class="flex flex-1 flex-col p-4 sm:p-5">
+<h4 class="font-serif text-[21px] sm:text-[23px] font-medium leading-snug" style="color: var(--text-primary);">${escapeHtml(photo.title)}</h4>
+<p class="mt-1.5 text-[13px] leading-relaxed" style="color: var(--text-secondary);">${escapeHtml(photo.caption)}</p>
+</div>
+</article>
+`).join("");
+
+mount.innerHTML = `
+<section id="section-pre-wedding-gallery" aria-labelledby="heading-pre-wedding-gallery" class="pt-4 sm:pt-6">
+<div class="mb-8 sm:mb-10 flex flex-col gap-2.5 sm:flex-row sm:items-end sm:justify-between border-b pb-4" style="border-color: var(--border-hairline);">
+<div>
+<p class="text-[11px] font-semibold uppercase tracking-[0.24em]" style="color: var(--accent-gold);">Before Forever · Monika &amp; Avadh</p>
+<h2 id="heading-pre-wedding-gallery" class="mt-1 font-serif text-3xl sm:text-4xl font-medium tracking-tight" style="color: var(--text-primary);">Pre-Wedding Memories</h2>
+</div>
+<p class="max-w-md text-xs sm:text-sm" style="color: var(--text-secondary);">A little collection of the moments, smiles, and portraits before the wedding day.</p>
+</div>
+<div class="mb-5 flex items-center justify-between gap-2">
+<p class="text-xs sm:text-sm" style="color: var(--text-muted);">Tap any photograph to view it fullscreen.</p>
+<span class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-medium" style="border-color: var(--border-hairline); background: var(--bg-pill); color: var(--accent-gold);">${photos.length} Photos</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">${cardsHtml}</div>
+</section>
+`;
+}
+
 /* =========================================================================
 RENDER INVITATION CARD (Hidden until "Invitation Card" button is clicked)
 ========================================================================= */
@@ -2305,9 +2442,9 @@ APPLE PHOTOS-STYLE FULLSCREEN PHOTO LIGHTBOX
 ========================================================================= */
 
 function getActiveGalleryPhotos() {
-return lightboxAlbum === "private"
-? CONFIG.ENGAGEMENT_GALLERY.privatePhotos
-: CONFIG.ENGAGEMENT_GALLERY.publicPhotos;
+if (lightboxAlbum === "private") return CONFIG.ENGAGEMENT_GALLERY.privatePhotos;
+if (lightboxAlbum === "prewedding") return CONFIG.ENGAGEMENT_GALLERY.preWeddingPhotos;
+return CONFIG.ENGAGEMENT_GALLERY.publicPhotos;
 }
 
 function openPhotoLightbox(album, index) {
@@ -2327,6 +2464,8 @@ lightboxCounter.textContent = `${index + 1} / ${photos.length}`;
 lightboxAlbumBadge.textContent =
 album === "private"
 ? `Family Photos · ${CONFIG.COUPLE.engagementDate}`
+: album === "prewedding"
+? "Pre-Wedding Gallery · Monika & Avadh"
 : `Engagement Gallery · ${CONFIG.COUPLE.engagementDate}`;
 lightboxTitle.textContent = photo.title;
 lightboxCaption.textContent = photo.caption;
@@ -2439,6 +2578,7 @@ const targetPhoto = pendingEngagementPhotoIndex;
 passcodeInput.blur();
 closePasscodeModal();
 renderEngagementGallery();
+renderPreWeddingGallery();
 showToast("Family Photos unlocked ✨");
 
 if (targetPhoto >= 0) {
