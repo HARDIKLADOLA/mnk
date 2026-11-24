@@ -401,6 +401,103 @@ scroll-behavior: auto !important;
   .prewedding-slider-track, .prewedding-slider-dot { transition: none !important; }
 }
 
+
+/* =========================================================================
+   MOBILE ALIGNMENT & VIEWPORT SAFETY
+   Keeps every section, card, control and modal inside the device viewport.
+   ========================================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html { width: 100%; min-width: 320px; scroll-padding-top: 76px; }
+body { width: 100%; min-width: 320px; min-height: 100svh; overflow-x: hidden; }
+img, iframe, video, svg { max-width: 100%; }
+main, section, article, header, footer, nav, #sectionsContainer,
+#engagementGalleryMount, #invitationCardMount { min-width: 0; }
+#sectionsContainer > section,
+#engagementGalleryMount > section,
+#invitationCardMount > section { width: 100%; min-width: 0; }
+#sectionsContainer .grid,
+#engagementGalleryMount .grid { min-width: 0; }
+#sectionsContainer article,
+#engagementGalleryMount article { min-width: 0; }
+#sectionsContainer h2,
+#sectionsContainer h3,
+#engagementGalleryMount h2,
+#engagementGalleryMount h3,
+#invitationCardMount h2 { overflow-wrap: anywhere; }
+#anniversaryListMount,
+#anniversaryListMount > div,
+#anniversaryListMount li,
+#anniversaryListMount li > div { min-width: 0; }
+#anniversaryListMount li > div:last-child { max-width: 100%; }
+#anniversaryListMount .font-mono { flex-wrap: wrap; }
+#filterPills { width: 100%; max-width: 100%; overscroll-behavior-x: contain; }
+.cinema-backdrop { overscroll-behavior: contain; }
+.cinema-panel {
+  max-height: min(94vh, 900px);
+  max-height: min(94dvh, 900px);
+  overscroll-behavior: contain;
+}
+#photoLightboxModal .cinema-panel { max-height: min(94vh, 900px); max-height: min(94dvh, 900px); }
+#cinemaModal .cinema-panel { overflow-x: hidden; overflow-y: auto; }
+#cinemaModal iframe { display: block; }
+.prewedding-slider,
+.prewedding-slider-frame,
+.prewedding-slider-track { min-width: 0; max-width: 100%; }
+.prewedding-slide { min-width: 100%; }
+#invitationCardMount img,
+#engagementGalleryMount img { height: auto; }
+@media (max-width: 640px) {
+  html { scroll-padding-top: 68px; }
+  header > div {
+    gap: 8px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  header > div > a { min-width: 0; gap: 7px; }
+  header > div > a > span:last-child {
+    font-size: 16px;
+    white-space: nowrap;
+  }
+  header > div > div { flex-shrink: 0; gap: 6px; }
+  #navLoveBtn, #themeToggleBtn {
+    min-height: 36px;
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+  #anniversaryListMount li { align-items: flex-start; }
+  #anniversaryListMount li > div:last-child { width: 100%; }
+  #anniversaryListMount li > div:last-child > div { max-width: 100%; }
+  #anniversaryListMount .font-mono { flex-wrap: nowrap; gap: 4px; }
+  #anniversaryListMount .font-mono > span { padding-left: 6px; padding-right: 6px; }
+  #sectionsContainer { padding-top: 28px; }
+  #sectionsContainer > section { scroll-margin-top: 76px; }
+  #engagementGalleryMount { padding-bottom: 28px; }
+  #photoLightboxModal, #cinemaModal, #passcodeModal { padding: 10px; }
+  #photoLightboxModal .cinema-panel,
+  #cinemaModal .cinema-panel { border-radius: 18px; }
+  #photoLightboxModal .cinema-panel { max-height: calc(100svh - 20px); }
+  #photoLightboxModal .cinema-panel > div:nth-child(2) {
+    min-height: 180px;
+    max-height: 56svh;
+  }
+  #cinemaModal .cinema-panel { max-height: calc(100svh - 20px); }
+  #cinemaModal .cinema-panel > div:nth-child(2) { flex: none; }
+  #cinemaModal .cinema-panel > div:last-child { padding: 14px; }
+  #invitationCardMount .inline-flex.rounded-full { max-width: 100%; }
+  #invitationCardMount .inline-flex.rounded-full button { padding-left: 16px; padding-right: 16px; }
+}
+@media (max-width: 380px) {
+  #themeLabel { display: none; }
+  #navLoveBtn { gap: 5px; padding-left: 8px; padding-right: 8px; }
+  header > div > a > span:last-child { font-size: 15px; }
+  #heroWeddingDate, #heroEngagementDate { font-size: 15px; }
+  #anniversaryListMount .font-mono { font-size: 11px; }
+  #anniversaryListMount .font-mono > span { padding-left: 5px; padding-right: 5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+}
+
 </style>
 </head>
 
@@ -550,7 +647,7 @@ id="heroWeddingDate"
 class="font-serif text-[17px] sm:text-[19px] font-medium tracking-wide"
 style="color: var(--text-primary);"
 >
-31 NOV 2024
+21 NOV 2024
 </span>
 </div>
 </div>
@@ -761,7 +858,7 @@ id="footerMilestoneDates"
 class="mt-2 font-serif text-sm tracking-wider"
 style="color: var(--accent-gold);"
 >
-Engagement · 19 MAY 2024 <span class="mx-1.5" style="color: var(--accent-rose);">✦</span> Wedding · 31 NOV 2024
+Engagement · 19 MAY 2024 <span class="mx-1.5" style="color: var(--accent-rose);">✦</span> Wedding · 21 NOV 2024
 </p>
 <p class="mt-1.5 text-xs tracking-wide" style="color: var(--text-muted);">
 Monika &amp; Avadh · Forever Begins Here
@@ -1167,7 +1264,7 @@ description: "Cinematic previews and the official title reveal of the wedding se
 },
 {
 id: "ceremony",
-eyebrow: "Sequential Chapters · 31 NOV 2024",
+eyebrow: "Sequential Chapters · 21 NOV 2024",
 label: "Ceremony Events",
 filterLabel: "Ceremony",
 description: "Every sacred ritual, joyous dance, and heartfelt vow in sequential order."
@@ -1216,7 +1313,7 @@ subtitle: "Title Reveal",
 caption: "The grand cinematic title opening for the Monika & Avadh Wedding Series."
 },
 
-/* ── 3. CEREMONY EVENTS (Private Vault — Unlocked with 31112024) ── */
+/* ── 3. CEREMONY EVENTS (Private Vault — Unlocked with 21112024) ── */
 {
 section: "ceremony",
 youtube: "https://youtu.be/MH5KFyXbO8A",
