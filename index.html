@@ -1448,18 +1448,16 @@ title: "Wedding Invitation",
 subtitle: "Monika & Avadh",
 caption: "With the blessings of our families, we warmly invite you to celebrate with us.",
 photos: [
-"https://github.com/user-attachments/assets/448dab1e-9a29-4c1a-87d3-c93da9aae91b",
-"https://github.com/user-attachments/assets/8354ad5f-97a2-40bc-98fb-1a78b17ca3ad",
-"https://github.com/user-attachments/assets/42980f03-51f2-49c0-865b-42fe2bfc020a",
-"https://github.com/user-attachments/assets/459361c7-62ac-4fd0-8c55-46621f2c397c",
-"https://github.com/user-attachments/assets/df045269-1c64-4b05-b186-88e535ba705d",
-"https://github.com/user-attachments/assets/b36bd6f3-daf7-4f5c-b2e6-9f7d144724ce",
-"https://github.com/user-attachments/assets/f8783282-a090-4f95-a190-260bf1bb3555",
-"https://github.com/user-attachments/assets/7b66cd46-b29a-4ae9-8a39-d40f4d526145",
-"https://github.com/user-attachments/assets/052ea937-0416-4e39-8af3-d19818973459"
+"https://github.com/user-attachments/assets/9948633e-3558-414a-aff9-78a984be0b1b",
+"https://github.com/user-attachments/assets/b92afd82-b516-49ae-9804-617935245777",
+"https://github.com/user-attachments/assets/d61184a2-ef5e-4dd4-9fb2-dcea634bba8b",
+"https://github.com/user-attachments/assets/834d0060-3d9b-4873-9b92-a7c2a63a1b1e",
+"https://github.com/user-attachments/assets/7307df37-8ecf-4a11-8bc9-d25e3c6e9899",
+"https://github.com/user-attachments/assets/b8bd6075-3c46-4837-9004-a9e419529190",
+"https://github.com/user-attachments/assets/87f72802-dfdb-474e-bd04-6d5e5e0696ae",
+"https://github.com/user-attachments/assets/18adbec6-2248-495f-afad-5df977c10855"
 ]
-}
-};
+}};
 
 /* =========================================================================
 UTILITY HELPERS
@@ -2420,6 +2418,31 @@ ${publicCardsHtml}
     />
   </div>
 </section>
+
+<!-- Elegant invitation call-to-action at the bottom of the gallery -->
+<div class="mx-auto max-w-3xl px-4 pb-14 sm:pb-20">
+  <button
+    type="button"
+    data-filter-id="invitation-card"
+    class="group relative flex w-full items-center justify-between gap-4 overflow-hidden rounded-[24px] px-5 py-5 text-left shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-[0.99] sm:rounded-[28px] sm:px-8 sm:py-7"
+    style="background:linear-gradient(120deg,#9b6b62 0%,#c18d82 48%,#d5ad83 100%); color:#fff;"
+    aria-label="View the wedding invitation"
+  >
+    <span class="pointer-events-none absolute -right-8 -top-10 h-36 w-36 rounded-full border border-white/20"></span>
+    <span class="pointer-events-none absolute -right-2 -bottom-16 h-40 w-40 rounded-full border border-white/15"></span>
+    <span class="relative flex min-w-0 items-center gap-4">
+      <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/25 bg-white/15 text-2xl shadow-inner sm:h-14 sm:w-14">💌</span>
+      <span class="min-w-0">
+        <span class="block text-[10px] font-semibold uppercase tracking-[0.22em] text-white/75">A little something special</span>
+        <span class="mt-1 block font-serif text-xl font-medium sm:text-2xl">View Wedding Invitation</span>
+        <span class="mt-1 block text-xs text-white/80 sm:text-sm">The invitation, page by page</span>
+      </span>
+    </span>
+    <span class="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/15 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></svg>
+    </span>
+  </button>
+</div>
 `;
 }
 
@@ -2464,7 +2487,7 @@ mount.innerHTML = `
         <img
           src="${escapeHtml(src)}"
           alt="Wedding invitation page ${index + 1}"
-          loading="lazy"
+          loading="${index < 2 ? "eager" : "lazy"}"
           decoding="async"
           class="block h-auto w-full object-contain"
           style="background:#fff;"
@@ -2478,30 +2501,7 @@ mount.innerHTML = `
     ${escapeHtml(card.caption || "")}
   </p>
 </section>
-<!-- Elegant invitation call-to-action at the bottom of the gallery -->
-<div class="mx-auto max-w-3xl px-4 pb-14 sm:pb-20">
-  <button
-    type="button"
-    data-filter-id="invitation-card"
-    class="group relative flex w-full items-center justify-between gap-4 overflow-hidden rounded-[24px] px-5 py-5 text-left shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-[0.99] sm:rounded-[28px] sm:px-8 sm:py-7"
-    style="background:linear-gradient(120deg,#9b6b62 0%,#c18d82 48%,#d5ad83 100%); color:#fff;"
-    aria-label="View the wedding invitation"
-  >
-    <span class="pointer-events-none absolute -right-8 -top-10 h-36 w-36 rounded-full border border-white/20"></span>
-    <span class="pointer-events-none absolute -right-2 -bottom-16 h-40 w-40 rounded-full border border-white/15"></span>
-    <span class="relative flex min-w-0 items-center gap-4">
-      <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/25 bg-white/15 text-2xl shadow-inner sm:h-14 sm:w-14">💌</span>
-      <span class="min-w-0">
-        <span class="block text-[10px] font-semibold uppercase tracking-[0.22em] text-white/75">A little something special</span>
-        <span class="mt-1 block font-serif text-xl font-medium sm:text-2xl">View Wedding Invitation</span>
-        <span class="mt-1 block text-xs text-white/80 sm:text-sm">The invitation, page by page</span>
-      </span>
-    </span>
-    <span class="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/15 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">
-      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></svg>
-    </span>
-  </button>
-</div>
+
 
 `;
 }
