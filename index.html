@@ -17,6 +17,8 @@ rel="stylesheet"
 <!-- Tailwind CSS -->
    
 <script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" />
+
 <script>
 tailwind.config = {
 theme: {
@@ -862,6 +864,78 @@ main, section, article, nav, header, footer,
   .film-card:hover, .memory-photo-card:hover { transform: none; }
   .film-card .thumb-img { transform: none; }
   button, a, [role="button"] { touch-action: manipulation; }
+}
+
+
+/* Standalone mobile layout safeguards: keep the page usable if the
+   Tailwind Play CDN script is blocked or delayed on a mobile connection. */
+html, body { margin: 0; width: 100%; min-height: 100%; }
+*, *::before, *::after { box-sizing: border-box; }
+svg { max-width: 100%; }
+#heroWatchBtn svg, main > section:first-of-type a[href="#chapters-bar"] svg {
+  display: block; width: 15px !important; height: 15px !important;
+  min-width: 15px; flex: 0 0 15px;
+}
+#heroWatchBtn, main > section:first-of-type a[href="#chapters-bar"] {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 46px; max-width: 100%; text-decoration: none;
+  border-radius: 999px; white-space: nowrap;
+}
+#heroTheaterMount { width: 100%; min-width: 0; }
+#heroTheaterMount article { width: 100%; max-width: 760px; margin-inline: auto; }
+#heroTheaterMount article > div:first-child { position: relative; width: 100%; aspect-ratio: 16 / 9; }
+#heroTheaterMount img { display: block; width: 100%; height: 100%; object-fit: cover; }
+#anniversaryListMount { width: 100%; }
+#chapters-bar { width: 100%; }
+#filterPills { display: flex; width: 100%; overflow-x: auto; }
+#sectionsContainer { width: 100%; }
+#sectionsContainer .grid { display: grid; grid-template-columns: minmax(0,1fr); }
+#engagementGalleryMount .grid { display: grid; grid-template-columns: minmax(0,1fr); }
+button, a { max-width: 100%; }
+@media (max-width: 640px) {
+  header.glass-nav { position: sticky; top: 0; }
+  header.glass-nav > div {
+    display: flex; width: 100%; min-height: 56px; height: auto;
+    align-items: center; justify-content: space-between;
+    gap: 8px; padding: 7px 12px;
+  }
+  header.glass-nav > div > a { flex: 1 1 auto; min-width: 0; }
+  header.glass-nav > div > a > span:last-child {
+    display: block; overflow: hidden; text-overflow: ellipsis;
+    white-space: nowrap; font-size: clamp(14px, 4vw, 17px);
+  }
+  header.glass-nav > div > div { display: flex; flex: 0 0 auto; gap: 6px; }
+  #navLoveBtn, #themeToggleBtn {
+    min-height: 38px; padding: 0 9px; font-size: 12px;
+  }
+  main > section:first-of-type {
+    width: 100%; padding: 34px 16px 28px; margin: 0 auto;
+  }
+  main > section:first-of-type > div:first-child { width: 100%; }
+  main > section:first-of-type h1 {
+    margin: 14px 0; font-size: clamp(36px, 10.5vw, 48px);
+    line-height: 1.08; overflow-wrap: normal;
+  }
+  main > section:first-of-type p { line-height: 1.55; }
+  main > section:first-of-type > div:nth-of-type(2) {
+    display: flex; flex-wrap: wrap; gap: 10px;
+  }
+  #heroTheaterMount { margin-top: 22px; }
+  #anniversaryListMount { margin-top: 22px; }
+  #chapters-bar { top: 0; padding: 8px 0; }
+  #sectionsContainer { padding: 28px 16px 40px; }
+  #sectionsContainer > section { margin-bottom: 36px; }
+  #sectionsContainer .grid, #engagementGalleryMount .grid {
+    grid-template-columns: minmax(0,1fr) !important; gap: 16px;
+  }
+  #engagementGalleryMount { padding: 0 16px 32px; }
+  #invitationCardMount { padding: 24px 16px; }
+  .prewedding-slider-frame { aspect-ratio: 4 / 3; min-height: 0; }
+}
+@media (min-width: 641px) {
+  #sectionsContainer .grid, #engagementGalleryMount .grid {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
 }
 
 </style>
