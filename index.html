@@ -403,100 +403,270 @@ scroll-behavior: auto !important;
 
 
 /* =========================================================================
-   MOBILE ALIGNMENT & VIEWPORT SAFETY
-   Keeps every section, card, control and modal inside the device viewport.
+   RESPONSIVE LAYOUT — precise mobile rules, without broad element overrides
    ========================================================================= */
 *, *::before, *::after { box-sizing: border-box; }
-html { width: 100%; min-width: 320px; scroll-padding-top: 76px; }
-body { width: 100%; min-width: 320px; min-height: 100svh; overflow-x: hidden; }
-img, iframe, video, svg { max-width: 100%; }
-main, section, article, header, footer, nav, #sectionsContainer,
-#engagementGalleryMount, #invitationCardMount { min-width: 0; }
+
+html {
+  width: 100%;
+  max-width: 100%;
+  scroll-padding-top: 76px;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+img, iframe, video { max-width: 100%; }
+main, section, article, nav, header, footer,
+#sectionsContainer, #engagementGalleryMount, #invitationCardMount,
+#anniversaryListMount { min-width: 0; }
 #sectionsContainer > section,
 #engagementGalleryMount > section,
-#invitationCardMount > section { width: 100%; min-width: 0; }
+#invitationCardMount > section { min-width: 0; max-width: 100%; }
+#sectionsContainer h2, #sectionsContainer h3,
+#engagementGalleryMount h2, #engagementGalleryMount h3,
+#invitationCardMount h2 { overflow-wrap: break-word; }
 #sectionsContainer .grid,
 #engagementGalleryMount .grid { min-width: 0; }
-#sectionsContainer article,
-#engagementGalleryMount article { min-width: 0; }
-#sectionsContainer h2,
-#sectionsContainer h3,
-#engagementGalleryMount h2,
-#engagementGalleryMount h3,
-#invitationCardMount h2 { overflow-wrap: anywhere; }
-#anniversaryListMount,
-#anniversaryListMount > div,
-#anniversaryListMount li,
-#anniversaryListMount li > div { min-width: 0; }
-#anniversaryListMount li > div:last-child { max-width: 100%; }
-#anniversaryListMount .font-mono { flex-wrap: wrap; }
-#filterPills { width: 100%; max-width: 100%; overscroll-behavior-x: contain; }
+#sectionsContainer .film-card,
+#engagementGalleryMount .memory-photo-card { min-width: 0; width: 100%; }
+#filterPills {
+  width: 100%;
+  max-width: 100%;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
 .cinema-backdrop { overscroll-behavior: contain; }
 .cinema-panel {
+  max-width: 100%;
   max-height: min(94vh, 900px);
   max-height: min(94dvh, 900px);
   overscroll-behavior: contain;
 }
-#photoLightboxModal .cinema-panel { max-height: min(94vh, 900px); max-height: min(94dvh, 900px); }
 #cinemaModal .cinema-panel { overflow-x: hidden; overflow-y: auto; }
 #cinemaModal iframe { display: block; }
-.prewedding-slider,
-.prewedding-slider-frame,
-.prewedding-slider-track { min-width: 0; max-width: 100%; }
+#anniversaryListMount,
+#anniversaryListMount > div,
+#anniversaryListMount li,
+#anniversaryListMount li > div { min-width: 0; }
+#anniversaryListMount .font-mono { white-space: nowrap; }
+.prewedding-slider, .prewedding-slider-frame,
+.prewedding-slider-track { width: 100%; min-width: 0; max-width: 100%; }
 .prewedding-slide { min-width: 100%; }
-#invitationCardMount img,
-#engagementGalleryMount img { height: auto; }
+
 @media (max-width: 640px) {
-  html { scroll-padding-top: 68px; }
-  header > div {
-    gap: 8px;
+  html { scroll-padding-top: 64px; }
+  .glass-nav > div {
+    width: 100%;
+    height: 54px;
     padding-left: 12px;
     padding-right: 12px;
+    gap: 8px;
   }
-  header > div > a { min-width: 0; gap: 7px; }
-  header > div > a > span:last-child {
-    font-size: 16px;
+  .glass-nav > div > a {
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 7px;
+    padding-right: 0;
+  }
+  .glass-nav > div > a > span:last-child {
+    min-width: 0;
+    font-size: clamp(14px, 4.1vw, 17px);
     white-space: nowrap;
+    letter-spacing: -0.025em;
   }
-  header > div > div { flex-shrink: 0; gap: 6px; }
+  .glass-nav > div > div {
+    flex: 0 0 auto;
+    gap: 6px;
+  }
   #navLoveBtn, #themeToggleBtn {
-    min-height: 36px;
+    min-height: 38px;
     padding-left: 9px;
     padding-right: 9px;
+    white-space: nowrap;
   }
-  #anniversaryListMount li { align-items: flex-start; }
+  #chapters-bar { top: 54px; }
+  #chapters-bar > div { padding-left: 12px; padding-right: 12px; }
+  #filterPills { justify-content: flex-start; padding-bottom: 3px; }
+  main > section:first-of-type {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 30px;
+    padding-bottom: 26px;
+  }
+  main > section:first-of-type h1 {
+    font-size: clamp(38px, 11vw, 46px);
+    line-height: 1.04;
+    overflow-wrap: normal;
+  }
+  main > section:first-of-type > div:first-child > p:not(:first-child) {
+    max-width: 34rem;
+  }
+  #anniversaryListMount { margin-top: 22px; }
+  #anniversaryListMount > div > div:first-child {
+    align-items: center;
+    gap: 8px;
+    padding: 11px 13px;
+  }
+  #anniversaryListMount > div > div:first-child > span:first-child {
+    max-width: 78%;
+    font-size: 9px;
+    line-height: 1.45;
+    letter-spacing: .14em;
+  }
+  #anniversaryListMount li {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 14px;
+  }
+  #anniversaryListMount li > div:first-child,
   #anniversaryListMount li > div:last-child { width: 100%; }
-  #anniversaryListMount li > div:last-child > div { max-width: 100%; }
-  #anniversaryListMount .font-mono { flex-wrap: nowrap; gap: 4px; }
-  #anniversaryListMount .font-mono > span { padding-left: 6px; padding-right: 6px; }
-  #sectionsContainer { padding-top: 28px; }
-  #sectionsContainer > section { scroll-margin-top: 76px; }
-  #engagementGalleryMount { padding-bottom: 28px; }
-  #photoLightboxModal, #cinemaModal, #passcodeModal { padding: 10px; }
-  #photoLightboxModal .cinema-panel,
-  #cinemaModal .cinema-panel { border-radius: 18px; }
-  #photoLightboxModal .cinema-panel { max-height: calc(100svh - 20px); }
-  #photoLightboxModal .cinema-panel > div:nth-child(2) {
-    min-height: 180px;
-    max-height: 56svh;
+  #anniversaryListMount li > div:first-child > div {
+    align-items: center;
+    gap: 6px;
   }
-  #cinemaModal .cinema-panel { max-height: calc(100svh - 20px); }
-  #cinemaModal .cinema-panel > div:nth-child(2) { flex: none; }
+  #anniversaryListMount li > div:first-child > div > span:nth-child(2) {
+    font-size: 17px;
+  }
+  #anniversaryListMount li > div:last-child {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+    padding-top: 9px;
+    border-top: 1px solid var(--border-hairline);
+  }
+  #anniversaryListMount li > div:last-child > span {
+    font-size: 9px;
+    letter-spacing: .1em;
+  }
+  #anniversaryListMount .font-mono { gap: 3px; font-size: 11px; }
+  #anniversaryListMount .font-mono > span { padding: 5px 6px; }
+  #sectionsContainer {
+    padding: 30px 16px 42px;
+    gap: 42px;
+  }
+  #sectionsContainer > section { scroll-margin-top: 72px; }
+  #sectionsContainer > section > div:first-of-type {
+    align-items: flex-start;
+    gap: 9px;
+    margin-bottom: 18px;
+    padding-bottom: 13px;
+  }
+  #sectionsContainer > section > div:first-of-type > div { min-width: 0; width: 100%; }
+  #sectionsContainer > section > div:first-of-type h2,
+  #engagementGalleryMount h2,
+  #invitationCardMount h2 {
+    font-size: 29px;
+    line-height: 1.1;
+  }
+  #sectionsContainer > section > div:first-of-type > p {
+    max-width: 100%;
+    font-size: 12px;
+    line-height: 1.55;
+  }
+  #sectionsContainer .grid,
+  #engagementGalleryMount .grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  #sectionsContainer .film-card,
+  #engagementGalleryMount .memory-photo-card {
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 18px;
+  }
+  #sectionsContainer .film-card > div:last-child { padding: 14px 15px 16px; }
+  #sectionsContainer .film-card h3 { font-size: 21px; line-height: 1.18; }
+  #sectionsContainer .film-card p:last-child { font-size: 13px; line-height: 1.55; }
+  .prewedding-slider { margin-bottom: 22px; }
+  .prewedding-slider-frame {
+    aspect-ratio: 4 / 3;
+    min-height: 0;
+    max-height: 420px;
+    border-radius: 18px;
+  }
+  .prewedding-slider-arrow { width: 36px; height: 36px; }
+  #engagementGalleryMount { padding: 0 16px 34px; }
+  #engagementGalleryMount > section { padding-top: 4px; }
+  #engagementGalleryMount > section > div:first-child {
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+  }
+  #engagementGalleryMount > section > div:nth-of-type(2) { margin-bottom: 34px; }
+  #finalFeaturedPhoto { padding: 0 16px 34px; }
+  #finalFeaturedPhoto > div { border-radius: 18px; }
+  #invitationCardMount { padding-left: 16px; padding-right: 16px; }
+  #invitationCardMount section > div:first-child { align-items: flex-start; }
+  #invitationCardMount section > div:nth-child(2) > div { max-width: 100%; }
+  #invitationPagesToggle, #invitationPostersToggle {
+    min-height: 42px;
+    padding-left: 18px;
+    padding-right: 18px;
+    font-size: 13px;
+  }
+  #photoLightboxModal, #cinemaModal, #passcodeModal {
+    padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom));
+    align-items: center;
+  }
+  #photoLightboxModal .cinema-panel,
+  #cinemaModal .cinema-panel {
+    width: 100%;
+    max-width: 100%;
+    max-height: calc(100vh - 16px);
+    max-height: calc(100dvh - 16px);
+    border-radius: 18px;
+  }
+  #cinemaModal .cinema-panel > div:nth-child(2) {
+    flex: 0 0 auto;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
   #cinemaModal .cinema-panel > div:last-child { padding: 14px; }
-  #invitationCardMount .inline-flex.rounded-full { max-width: 100%; }
-  #invitationCardMount .inline-flex.rounded-full button { padding-left: 16px; padding-right: 16px; }
+  #cinemaModal #modalTitle { font-size: 25px; }
+  #cinemaModal #modalCaption { font-size: 13px; line-height: 1.5; }
+  #cinemaModal #modalPrevBtn, #cinemaModal #modalNextBtn {
+    min-width: 0;
+    padding: 8px;
+  }
+  #photoLightboxModal .cinema-panel > div:nth-child(2) {
+    flex: 1 1 auto;
+    min-height: 160px;
+    max-height: 58dvh;
+  }
+  #photoLightboxModal #lightboxImage { max-height: 54dvh; }
+  #photoLightboxModal #lightboxTitle { font-size: 22px; }
+  #passcodePanel { width: 100%; max-width: 390px; padding: 24px 20px; }
+  footer { padding-left: 16px; padding-right: 16px; }
 }
+
 @media (max-width: 380px) {
   #themeLabel { display: none; }
   #navLoveBtn { gap: 5px; padding-left: 8px; padding-right: 8px; }
-  header > div > a > span:last-child { font-size: 15px; }
-  #heroWeddingDate, #heroEngagementDate { font-size: 15px; }
-  #anniversaryListMount .font-mono { font-size: 11px; }
+  .glass-nav > div > a > span:last-child { font-size: 14px; }
+  #anniversaryListMount .font-mono { font-size: 10px; }
   #anniversaryListMount .font-mono > span { padding-left: 5px; padding-right: 5px; }
+  #invitationPagesToggle, #invitationPostersToggle { padding-left: 14px; padding-right: 14px; }
 }
+
+@media (hover: none) {
+  .film-card:hover, .memory-photo-card:hover { transform: none; }
+  .film-card .thumb-img { transform: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto !important; }
 }
+
 
 </style>
 </head>
