@@ -2457,17 +2457,22 @@ if (!mount) return;
 
 const card = CONFIG.INVITATION_CARD;
 const invitationPhotos = Array.isArray(card?.photos) ? card.photos.filter(Boolean) : [];
+const posterPhotos = [
+  { src: "https://github.com/user-attachments/assets/14ebed50-935c-4673-b443-e1d746be75b2", alt: "Monika and Avadh welcome poster" },
+  { src: "https://github.com/user-attachments/assets/c1a169cd-ebfd-478e-9aab-33263dd5e014", alt: "Monika and Avadh engagement poster" },
+  { src: "https://github.com/user-attachments/assets/f614183a-50e2-45e8-9ef0-c93b7eddd7c4", alt: "Gujarati wedding invitation poster" }
+];
 const shouldShow = activeFilter === "invitation-card" && invitationPhotos.length > 0;
 
 mount.classList.toggle("hidden", !shouldShow);
 if (!shouldShow) {
-mount.innerHTML = "";
-return;
+  mount.innerHTML = "";
+  return;
 }
 
 mount.innerHTML = `
 <section id="section-invitation-card" aria-labelledby="heading-invitation-card" class="animate-card-in">
-  <div class="mb-7 sm:mb-9 flex flex-col gap-2.5 sm:flex-row sm:items-end sm:justify-between border-b pb-4" style="border-color: var(--border-hairline);">
+  <div class="mb-5 sm:mb-7 flex flex-col gap-2.5 sm:flex-row sm:items-end sm:justify-between border-b pb-4" style="border-color: var(--border-hairline);">
     <div>
       <p class="text-[11px] font-semibold uppercase tracking-[0.24em]" style="color: var(--accent-gold);">
         Official Invitation · ${escapeHtml(CONFIG.COUPLE.weddingDate)}
@@ -2481,18 +2486,39 @@ mount.innerHTML = `
     </p>
   </div>
 
-  <div class="mx-auto flex max-w-3xl flex-col gap-4 sm:gap-6">
+  <div class="mx-auto mb-6 flex max-w-3xl justify-center">
+    <div class="inline-flex rounded-full border p-1 shadow-sm" style="border-color:var(--border-hairline);background:var(--bg-card);">
+      <button type="button" id="invitationPagesToggle" aria-pressed="true"
+        class="rounded-full px-5 py-2.5 text-sm font-semibold transition-all"
+        style="background:var(--bg-pill-active);color:var(--text-pill-active);">
+        Invitation
+      </button>
+      <button type="button" id="invitationPostersToggle" aria-pressed="false"
+        class="rounded-full px-5 py-2.5 text-sm font-semibold transition-all"
+        style="color:var(--text-secondary);">
+        Posters
+      </button>
+    </div>
+  </div>
+
+  <div id="invitationPagesView" class="mx-auto flex max-w-3xl flex-col gap-4 sm:gap-6">
     ${invitationPhotos.map((src, index) => `
       <figure class="overflow-hidden rounded-2xl sm:rounded-[26px] bg-white shadow-sm ring-1 ring-black/5">
-        <img
-          src="${escapeHtml(src)}"
-          alt="Wedding invitation page ${index + 1}"
-          loading="${index < 2 ? "eager" : "lazy"}"
-          decoding="async"
-          class="block h-auto w-full object-contain"
-          style="background:#fff;"
-          onerror="handleGalleryImgError(this)"
-        />
+        <img src="${escapeHtml(src)}" alt="Wedding invitation page ${index + 1}"
+          loading="${index < 2 ? "eager" : "lazy"}" decoding="async"
+          class="block h-auto w-full object-contain" style="background:#fff;"
+          onerror="handleGalleryImgError(this)" />
+      </figure>
+    `).join("")}
+  </div>
+
+  <div id="invitationPostersView" class="mx-auto hidden max-w-3xl flex-col gap-4 sm:gap-6">
+    ${posterPhotos.map((photo, index) => `
+      <figure class="overflow-hidden rounded-2xl sm:rounded-[26px] bg-white shadow-sm ring-1 ring-black/5">
+        <img src="${photo.src}" alt="${escapeHtml(photo.alt)}"
+          loading="${index === 0 ? "eager" : "lazy"}" decoding="async"
+          class="block h-auto w-full object-contain" style="background:#fff;"
+          onerror="handleGalleryImgError(this)" />
       </figure>
     `).join("")}
   </div>
@@ -2501,9 +2527,25 @@ mount.innerHTML = `
     ${escapeHtml(card.caption || "")}
   </p>
 </section>
-
-
 `;
+
+const pagesButton = document.getElementById("invitationPagesToggle");
+const postersButton = document.getElementById("invitationPostersToggle");
+const pagesView = document.getElementById("invitationPagesView");
+const postersView = document.getElementById("invitationPostersView");
+const setInvitationView = (showPosters) => {
+  pagesView.classList.toggle("hidden", showPosters);
+  postersView.classList.toggle("hidden", !showPosters);
+  postersView.classList.toggle("flex", showPosters);
+  pagesButton.setAttribute("aria-pressed", String(!showPosters));
+  postersButton.setAttribute("aria-pressed", String(showPosters));
+  pagesButton.style.background = showPosters ? "transparent" : "var(--bg-pill-active)";
+  pagesButton.style.color = showPosters ? "var(--text-secondary)" : "var(--text-pill-active)";
+  postersButton.style.background = showPosters ? "var(--bg-pill-active)" : "transparent";
+  postersButton.style.color = showPosters ? "var(--text-pill-active)" : "var(--text-secondary)";
+};
+pagesButton.addEventListener("click", () => setInvitationView(false));
+postersButton.addEventListener("click", () => setInvitationView(true));
 }
 
 /* =========================================================================
