@@ -668,6 +668,202 @@ main, section, article, nav, header, footer,
 }
 
 
+
+/* =========================================================================
+   ANDROID / SMALL-SCREEN LAYOUT HARDENING
+   Keep the original design and content; prevent flex/grid overflow and
+   make the header, cards, galleries and overlays fit narrow viewports.
+   ========================================================================= */
+@media screen and (max-width: 640px) {
+  html, body {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  body { overscroll-behavior-x: none; }
+
+  /* Compact, predictable navigation on Android phones */
+  .glass-nav > div {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: 54px;
+    height: auto;
+    padding: 6px 10px;
+    gap: 6px;
+  }
+  .glass-nav > div > a {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    gap: 6px;
+    padding-right: 0;
+  }
+  .glass-nav > div > a > span:first-child {
+    width: 29px;
+    height: 29px;
+    flex: 0 0 29px;
+  }
+  .glass-nav > div > a > span:last-child {
+    min-width: 0;
+    font-size: clamp(12px, 3.8vw, 16px);
+    letter-spacing: -0.035em;
+    white-space: nowrap;
+  }
+  .glass-nav > div > div {
+    flex: 0 0 auto;
+    min-width: 0;
+    gap: 5px;
+  }
+  #navLoveBtn, #themeToggleBtn {
+    flex: 0 0 auto;
+    min-width: 36px;
+    min-height: 38px;
+    padding: 0 8px;
+    gap: 5px;
+    white-space: nowrap;
+  }
+
+  /* Let all major page regions shrink to the actual viewport */
+  main, main > section, #sectionsContainer, #sectionsContainer > section,
+  #engagementGalleryMount, #engagementGalleryMount > section,
+  #invitationCardMount, #invitationCardMount > section,
+  #finalFeaturedPhoto, #heroTheaterMount, footer {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  main > section:first-of-type {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  main > section:first-of-type h1 {
+    max-width: 100%;
+    font-size: clamp(34px, 10.5vw, 46px);
+    line-height: 1.06;
+    overflow-wrap: normal;
+  }
+  main > section:first-of-type .glass-card {
+    max-width: 100%;
+  }
+
+  /* Stable single-column cards and no intrinsic-width overflow */
+  #sectionsContainer .grid,
+  #engagementGalleryMount .grid,
+  #invitationCardMount .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    min-width: 0;
+  }
+  #sectionsContainer .film-card,
+  #engagementGalleryMount .memory-photo-card,
+  #invitationCardMount article,
+  #invitationCardMount .glass-card {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+  #sectionsContainer h2, #sectionsContainer h3,
+  #engagementGalleryMount h2, #engagementGalleryMount h3,
+  #invitationCardMount h2, #invitationCardMount h3,
+  #sectionsContainer p, #engagementGalleryMount p,
+  #invitationCardMount p {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  #heroTheaterMount img, #sectionsContainer img,
+  #engagementGalleryMount img, #invitationCardMount img,
+  #finalFeaturedPhoto img {
+    display: block;
+    max-width: 100%;
+  }
+  #invitationCardMount img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* Horizontal controls scroll inside their own region, not the page */
+  #filterPills {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x;
+  }
+  #filterPills > * { flex: 0 0 auto; }
+
+  /* Slideshow keeps its own width and touch gestures */
+  .prewedding-slider, .prewedding-slider-frame,
+  .prewedding-slider-track { width: 100%; min-width: 0; max-width: 100%; }
+  .prewedding-slider-frame { touch-action: pan-y; }
+  .prewedding-slide { flex: 0 0 100%; min-width: 100%; max-width: 100%; }
+
+  /* Avoid clipped controls and oversized modal panels */
+  #photoLightboxModal, #cinemaModal, #passcodeModal {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    padding-left: max(8px, env(safe-area-inset-left));
+    padding-right: max(8px, env(safe-area-inset-right));
+    padding-top: max(8px, env(safe-area-inset-top));
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+  #photoLightboxModal .cinema-panel,
+  #cinemaModal .cinema-panel,
+  #passcodeModal .cinema-panel {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+  #cinemaModal iframe {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+  #photoLightboxModal img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* Prevent long labels/timer digits from pushing the page wider */
+  #anniversaryListMount, #anniversaryListMount * {
+    min-width: 0;
+  }
+  #anniversaryListMount .font-mono {
+    max-width: 100%;
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+  #anniversaryListMount .font-mono > span {
+    flex: 0 1 auto;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .glass-nav > div { padding-left: 8px; padding-right: 8px; gap: 4px; }
+  .glass-nav > div > a { gap: 5px; }
+  .glass-nav > div > a > span:last-child { font-size: 12px; }
+  #themeLabel { display: none !important; }
+  #navLoveBtn, #themeToggleBtn { padding-left: 7px; padding-right: 7px; }
+  main > section:first-of-type h1 { font-size: clamp(32px, 10vw, 38px); }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .film-card:hover, .memory-photo-card:hover { transform: none; }
+  .film-card .thumb-img { transform: none; }
+  button, a, [role="button"] { touch-action: manipulation; }
+}
+
 </style>
 </head>
 
