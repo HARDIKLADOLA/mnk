@@ -273,6 +273,57 @@ transition-duration: 0.01ms !important;
 scroll-behavior: auto !important;
 }
 }
+
+/* =========================================================================
+   PREMIUM FULL-FRAME PHOTO GALLERIES
+   Images use object-fit: contain so every original photograph is visible.
+   ========================================================================= */
+.memory-photo-card {
+  border: 1px solid var(--border-hairline);
+  background: var(--bg-card);
+  box-shadow: 0 8px 28px rgba(20, 16, 22, 0.055);
+  transform: translateY(0);
+  transition: transform 420ms cubic-bezier(.22,1,.36,1),
+              box-shadow 420ms cubic-bezier(.22,1,.36,1),
+              border-color 420ms ease;
+}
+.memory-photo-card:hover,
+.memory-photo-card:focus-visible {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 42px rgba(20, 16, 22, 0.12);
+  border-color: var(--border-strong);
+  outline: none;
+}
+.memory-photo-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(210, 185, 176, .12), transparent 72%),
+    var(--bg-card);
+  isolation: isolate;
+}
+.memory-photo-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain !important;
+  object-position: center;
+  transform: none !important;
+  transition: opacity 420ms ease, filter 420ms ease;
+}
+.memory-photo-card:hover .memory-photo-img {
+  opacity: .96;
+  filter: saturate(1.035);
+}
+@media (prefers-reduced-motion: reduce) {
+  .memory-photo-card,
+  .memory-photo-img {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
 </style>
 </head>
 
@@ -2114,7 +2165,7 @@ const { publicPhotos, privatePhotos } = CONFIG.ENGAGEMENT_GALLERY;
 const publicCardsHtml = publicPhotos
 .map((photo, idx) => `
 <article
-class="film-card glass-card animate-card-in group flex cursor-pointer flex-col overflow-hidden rounded-[20px] sm:rounded-[24px]"
+class="memory-photo-card glass-card animate-card-in group flex cursor-pointer flex-col overflow-hidden rounded-[22px] sm:rounded-[26px]"
 style="animation-delay: ${Math.min(idx * 50, 260)}ms;"
 data-photo-album="public"
 data-photo-index="${idx}"
@@ -2122,16 +2173,15 @@ role="button"
 tabindex="0"
 aria-label="View engagement photo: ${escapeHtml(photo.title)}"
 >
-<div class="relative aspect-[4/3] w-full overflow-hidden bg-black/10">
+<div class="memory-photo-frame relative aspect-[3/2] w-full overflow-hidden">
 <img
 src="${escapeHtml(photo.src)}"
 alt="${escapeHtml(photo.title)}"
 data-title="${escapeHtml(photo.title)}"
 loading="lazy"
-class="thumb-img h-full w-full object-cover"
+class="thumb-img memory-photo-img h-full w-full object-contain"
 onerror="handleGalleryImgError(this)"
 />
-<div class="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-80 transition-opacity group-hover:opacity-95"></div>
 <span class="absolute top-3 left-3 rounded-full border border-white/20 bg-black/45 px-2.5 py-0.5 text-[11px] font-semibold tracking-wider text-white/95 backdrop-blur-md tabular-nums">
 ${String(idx + 1).padStart(2, "0")}
 </span>
@@ -2152,7 +2202,7 @@ const privateCardsHtml = engagementUnlocked
 ? privatePhotos
 .map((photo, idx) => `
 <article
-class="film-card glass-card animate-card-in group flex cursor-pointer flex-col overflow-hidden rounded-[20px] sm:rounded-[24px]"
+class="memory-photo-card glass-card animate-card-in group flex cursor-pointer flex-col overflow-hidden rounded-[22px] sm:rounded-[26px]"
 style="animation-delay: ${Math.min(idx * 50, 260)}ms;"
 data-photo-album="private"
 data-photo-index="${idx}"
@@ -2160,16 +2210,15 @@ role="button"
 tabindex="0"
 aria-label="View family engagement photo: ${escapeHtml(photo.title)}"
 >
-<div class="relative aspect-[4/3] w-full overflow-hidden bg-black/15">
+<div class="memory-photo-frame relative aspect-[3/2] w-full overflow-hidden">
 <img
 src="${escapeHtml(photo.src)}"
 alt="${escapeHtml(photo.title)}"
 data-title="${escapeHtml(photo.title)}"
 loading="lazy"
-class="thumb-img h-full w-full object-cover transition-all duration-500"
+class="thumb-img memory-photo-img h-full w-full object-contain transition-all duration-500"
 onerror="handleGalleryImgError(this)"
 />
-<div class="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent"></div>
 <span class="absolute top-3 left-3 rounded-full border border-white/20 bg-black/45 px-2.5 py-0.5 text-[11px] font-semibold tracking-wider text-white/95 backdrop-blur-md tabular-nums">
 ${String(idx + 1).padStart(2, "0")}
 </span>
@@ -2310,7 +2359,7 @@ if (!shouldShow) return;
 const photos = CONFIG.ENGAGEMENT_GALLERY.preWeddingPhotos || [];
 const cardsHtml = photos.map((photo, idx) => `
 <article
-class="film-card glass-card animate-card-in group flex cursor-pointer flex-col overflow-hidden rounded-[20px] sm:rounded-[24px]"
+class="memory-photo-card glass-card animate-card-in group flex cursor-pointer flex-col overflow-hidden rounded-[22px] sm:rounded-[26px]"
 style="animation-delay: ${Math.min(idx * 45, 260)}ms;"
 data-photo-album="prewedding"
 data-photo-index="${idx}"
@@ -2318,9 +2367,8 @@ role="button"
 tabindex="0"
 aria-label="View pre-wedding photo: ${escapeHtml(photo.title)}"
 >
-<div class="relative aspect-[4/3] w-full overflow-hidden bg-black/10">
-<img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.title)}" data-title="${escapeHtml(photo.title)}" loading="lazy" class="thumb-img h-full w-full object-cover" onerror="handleGalleryImgError(this)" />
-<div class="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-80 transition-opacity group-hover:opacity-95"></div>
+<div class="memory-photo-frame relative aspect-[3/2] w-full overflow-hidden">
+<img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.title)}" data-title="${escapeHtml(photo.title)}" loading="lazy" class="thumb-img memory-photo-img h-full w-full object-contain" onerror="handleGalleryImgError(this)" />
 <span class="absolute top-3 left-3 rounded-full border border-white/20 bg-black/45 px-2.5 py-0.5 text-[11px] font-semibold tracking-wider text-white/95 backdrop-blur-md tabular-nums">${String(idx + 1).padStart(2, "0")}</span>
 </div>
 <div class="flex flex-1 flex-col p-4 sm:p-5">
